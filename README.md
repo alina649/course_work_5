@@ -31,6 +31,7 @@
 
 ## Файл main.py
 -активирует код с файлов connecting_database.py и connecting_database.py.
+
 -реализует контакт с пользователем.
 
 
