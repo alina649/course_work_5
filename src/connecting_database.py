@@ -1,9 +1,9 @@
 from typing import List, Tuple, Any
-
 import psycopg2
 
 
 class DBManager:
+
     
     def __init__(self, params: dict):
         self.params = params
@@ -17,6 +17,7 @@ class DBManager:
         cur.execute("""SELECT title_company, number_vacancies FROM company""")
 
         rows = cur.fetchall()
+
 
         for i in rows:
             name_company = i[0]
@@ -109,7 +110,6 @@ class DBManager:
 
         cur.close()  # Закрываем курсор
         conn.close()  # Закрываем
-
 
 
 
