@@ -1,29 +1,26 @@
-from pprint import pprint
 from typing import Any
 import psycopg2
 import requests
-
-from src.config import config
 
 
 def get_hhRU_data(company_ids: list[str]):
     """Получение данных с сайта HH_ru"""
     data = []
     for company_id in company_ids:
-        url_company = f'https://api.hh.ru/employers/{company_id}' #Информация о названии компании и количество вакансий
-        url_vacancy = 'https://api.hh.ru/vacancies' # нформация о вакансиях
+        url_company = f'https://api.hh.ru/employers/{company_id}'  # Информация о компании
+        url_vacancy = 'https://api.hh.ru/vacancies'  # Информация о вакансиях
         params = {'employer_id': company_id,
                   'per_page': '10'}
-        headers = {
-            "User-Agent": "50355527",  # Replace with your User-Agent header
-        }
+        headers = {"User-Agent": "50355527", }
         response_vacancy = requests.get(url_vacancy, params=params, headers=headers)
         response_company = requests.get(url_company, headers=headers)
 
-        if response_vacancy.status_code == 200 and response_company.status_code == 200:
+        if response_vacancy.status_code == 200 and response_company.status_code == 200:  # Проверка статуса кода
             data_vacancy = response_vacancy.json()
             dat_company = response_company.json()
             data.append({'company': dat_company, 'vacancy': data_vacancy['items']})
+        else:
+            print('Ошибка при подключении')
     return data
 
 
@@ -35,7 +32,7 @@ def create_database(database_name: str, params: dict):
     cur = conn.cursor()
 
     cur.execute(f"DROP DATABASE {database_name}")  # Удаление базы данных
-    cur.execute(f"CREATE DATABASE {database_name}")  # создание БД
+    cur.execute(f"CREATE DATABASE {database_name}")  # создание новой БД
 
     conn.close()
 
@@ -48,7 +45,7 @@ def create_database(database_name: str, params: dict):
                 title_company VARCHAR(255),
                 number_vacancies INTEGER
             );
-        """)
+        """)  # Создание таблицы синформацией о компаниях (название, id, количесттво вакансий)
 
     with conn.cursor() as cur:
         cur.execute("""
@@ -59,7 +56,7 @@ def create_database(database_name: str, params: dict):
                 salary_to INTEGER,
                 alternate_url TEXT
             );
-        """)
+        """)  # Создание таблицы синформацией о вакансиях (название, id компании, зп с/до, ссылка)
 
     conn.commit()
     conn.close()
@@ -89,11 +86,11 @@ def save_data_to_database(data: list[dict[str, Any]], database_name: str, params
                     if vacancy['salary']['from'] is not None:
                         salary_from = vacancy['salary']['from']
                     else:
-                        salary_from = 0
+                        salary_from = vacancy['salary']['to']
                     if vacancy['salary']['to'] is not None:
                         salary_to = vacancy['salary']['to']
                     else:
-                        salary_to = 0
+                        salary_to = vacancy['salary']['from']
                 else:
                     salary_from = 0
                     salary_to = 0
