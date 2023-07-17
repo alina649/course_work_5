@@ -16,73 +16,42 @@ def main():
     information = DBManager(params)
 
     while True:
-        while True:  # Проверка ответа пользователя
+        human_response = input("Введите цифру того что хотите увидеть:"
+                               "\n1-Вывести на экран  список всех компаний "
+                               "и количество вакансий у каждой компании?  "
+                               "\n2-Вывести на экран список всех вакансий с указанием названия компании,"
+                               "названия вакансии и зарплаты и ссылки на вакансию"
+                               "\n3-Вывести на экран среднюю зарплату по вакансиям?"
+                               "\n4-Вывести на экран список всех вакансий, у которых "
+                               "зарплата выше средней по всем вакансиям?"
+                               "\n5-Вывести на экран список всех вакансий, в названии "
+                               "которых содержатся слова, например “python”?"
+                               "\nВведите 'стоп', чтобы выйти"
+                               "\nОтвет: ")
 
-            human_response = input("Вывести на экран  список всех компаний "
-                                   "и количество вакансий у каждой компании? Да/Нет"
-                                   "\nОтвет: ")
+        if human_response.lower() == '1':
+            information.get_companies_and_vacancies_count()
+            continue
 
-            if human_response.lower() == 'да':
-                information.get_companies_and_vacancies_count()
-                break
+        if human_response.lower() == '2':
+            information.get_all_vacancies()
+            continue
 
-            if human_response.lower() == 'нет':
-                break
-            else:
-                print('Неверно введен ответ на вопрос')
-                continue
+        if human_response.lower() == '3':
+            information.get_avg_salary()
+            continue
 
-        while True:
-            human_response = input("Вывести на экран список всех вакансий с указанием названия компании,"
-                                   "названия вакансии и зарплаты и ссылки на вакансию? Да/Нет"
-                                   "\nОтвет: ")
-            if human_response.lower() == 'да':
-                information.get_all_vacancies()
-                break
-            if human_response.lower() == 'нет':
-                break
-            else:
-                print('Неверно введен ответ на вопрос')
-                continue
+        if human_response.lower() == '4':
+            information.get_vacancies_with_higher_salary()
+            continue
 
-        while True:
-            human_response = input("Вывести на экран среднюю зарплату по вакансиям? Да/Нет"
-                                   "\nОтвет: ")
-            if human_response.lower() == 'да':
-                information.get_avg_salary()
-                break
-            if human_response.lower() == 'нет':
-                break
-            else:
-                print('Неверно введен ответ на вопрос')
-                continue
+        if human_response.lower() == '5':
+            word = input("Введите слово: ")
+            information.get_vacancies_with_keyword(word)
+            continue
 
-        while True:
-            human_response = input("Вывести на экран список всех вакансий, у которых "
-                                   "зарплата выше средней по всем вакансиям? Да/Нет"
-                                   "\nОтвет: ")
-            if human_response.lower() == 'да':
-                information.get_vacancies_with_higher_salary()
-                break
-            if human_response.lower() == 'нет':
-                break
-            else:
-                print('Неверно введен ответ на вопрос')
-                continue
-
-        while True:
-            human_response = input("Вывести на экран список всех вакансий, в названии "
-                                   "которых содержатся слова, например “python”? Да/Нет"
-                                   "\nОтвет: ")
-            if human_response.lower() == 'да':
-                word = input("Введите слово: ")
-                information.get_vacancies_with_keyword(word)
-                exit()
-            if human_response.lower() == 'нет':
-                exit()
-            else:
-                print('Неверно введен ответ на вопрос')
-                continue
+        if human_response.lower() == 'стоп':
+            exit()
 
 
 if __name__ == '__main__':
